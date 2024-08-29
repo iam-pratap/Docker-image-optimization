@@ -163,4 +163,51 @@ docker images
 ```
 Output should be:
 ```
+simplecalculator   latest    abbbc058f909   8 seconds ago   666MB
+ubuntu             latest    edbfe74c41f8   3 weeks ago     78.1MB
+hello-world        latest    d2c94e258dcb   16 months ago   13.3kB
+```
+### Do with Multistage build
+
+Create `Dockerfile` and apply the below configuration
+
+```
+######################
+# BASE IMAGE(stage@1)
+######################
+
+FROM ubuntu AS build
+
+RUN apt-get update && apt-get install -y golang-go
+
+ENV GO111MODULE=off
+
+COPY . .
+
+RUN CGO_ENABLED=0 go build -o /app .
+
+####################
+# stage@2
+####################
+
+FROM scratch
+
+# Copy the compiled binary from the build stage
+COPY --from=build /app /app
+
+# Set the entrypoint for the container to run the binary
+ENTRYPOINT ["/app"]
+```
+Build this image using Dockerfile
+```
+docker build -t multi-stage-test .
+```
+Output should be:
+```
+REPOSITORY         TAG       IMAGE ID       CREATED              SIZE
+multi-stage-test   latest    4b19e4557276   About a minute ago   1.96MB
+simplecalculator   latest    abbbc058f909   6 minutes ago        666MB
+ubuntu             latest    edbfe74c41f8   3 weeks ago          78.1MB
+hello-world        latest    d2c94e258dcb   16 months ago        13.3kB
+
 ```
