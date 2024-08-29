@@ -56,3 +56,111 @@ This message shows that your installation appears to be working correctly.
 ...
 ...
 ```
+#### Taken this calculator application from GitHub
+
+Create `calculator.go` file and apply the below configuration in this file
+
+```
+package main
+
+import (
+        "bufio"
+        "fmt"
+        "os"
+        "strconv"
+        "strings"
+)
+
+func main() {
+        fmt.Println("Hi Honey Pratap, I am a calculator app ....")
+
+        for {
+                // Read input from the user
+                reader := bufio.NewReader(os.Stdin)
+                fmt.Print("Enter any calculation (Example: 1 + 2 (or) 2 * 5 -> Please maintain spaces as shown in example): ")
+                text, _ := reader.ReadString('\n')
+
+                // Trim the newline character from the input
+                text = strings.TrimSpace(text)
+
+                // Check if the user entered "exit" to quit the program
+                if text == "exit" {
+                        break
+                }
+
+                // Split the input into two parts: the left operand and the right operand
+                parts := strings.Split(text, " ")
+                if len(parts) != 3 {
+                        fmt.Println("Invalid input. Try again.")
+                        continue
+                }
+
+                // Convert the operands to integers
+                left, err := strconv.Atoi(parts[0])
+                if err != nil {
+                        fmt.Println("Invalid input. Try again.")
+                        continue
+                }
+                right, err := strconv.Atoi(parts[2])
+                if err != nil {
+                        fmt.Println("Invalid input. Try again.")
+                        continue
+                }
+
+                // Perform the calculation based on the operator
+                var result int
+                switch parts[1] {
+                case "+":
+                        result = left + right
+                case "-":
+                        result = left - right
+                case "*":
+                        result = left * right
+                case "/":
+                        result = left / right
+                default:
+                        fmt.Println("Invalid operator. Try again.")
+                        continue
+                }
+
+                // Print the result
+                fmt.Printf("Result: %d\n", result)
+        }
+}
+```
+### Do without Mutltistage build
+
+Create `Dockerfile` and apply the below configuration
+
+```
+
+###########################################
+# BASE IMAGE
+###########################################
+
+FROM ubuntu AS build
+
+RUN apt-get update && apt-get install -y golang-go
+
+ENV GO111MODULE=off
+
+COPY . .
+
+RUN CGO_ENABLED=0 go build -o /app .
+
+ENTRYPOINT ["/app"]
+```
+
+Build this image using Dockerfile
+
+```
+docker build -t simplecalculator .
+```
+
+Check the docker is created or not
+```
+docker images
+```
+Output should be:
+```
+```
