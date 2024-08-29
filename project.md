@@ -211,3 +211,15 @@ ubuntu             latest    edbfe74c41f8   3 weeks ago          78.1MB
 hello-world        latest    d2c94e258dcb   16 months ago        13.3kB
 
 ```
+
+create a container using `multi-stage-test` image
+```
+docker run -it --name app1 multi-stage-test /bin/bash
+```
+
+Output look like 
+```
+Hi Honey Pratap, I am a calculator app ....
+Enter any calculation (Example: 1 + 2 (or) 2 * 5 -> Please maintain spaces as shown in example): 2 + 3
+Result: 5
+```
