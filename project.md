@@ -1,5 +1,13 @@
 # Docker Image Optimization
 
+Docker file that you have written for application in your for your organization and you require python runtime to execute this application but if you look at the docker image that you have created it has 100 other thing it has a ubuntu base image will come with a lot of ubuntu system dependencies, apt packages and apt repositories it has a lot of overload on your docker image.
+
+End of the day you just want to run this calculator application and that calculator application only requires python runtime not even the applications that you have installed. As part of the stages these are only required to build your application. So these are two different stages, running your application is required to build your application. Then docker introduced a concept called `Multistaged build`
+
+You will split our Dockerfile into two parts
+
+If you directly use python runtime image as a base image the problem would be you have to install a lot of things your docker image will became very complicated. you choose a very rich base image. base image that has all the dependencies. you are not even worried if this base image is 1GB or 2GB. The reason for that is base image will be removed and finally the docker image that you are creating will only have the last stage that is a final stage which will be a minimalistic image so it has to be a minimalistic image because by choosing a minimalistic image you will get the advantage of your docker multi stage.
+
 #### Go to AWS Management console and Create an Ubuntu Ec2 instance
 
 Switch the user as root and update the server
